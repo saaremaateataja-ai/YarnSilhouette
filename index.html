@@ -17,9 +17,16 @@
     }
   </style>
 </head>
-<body>  <canvas id="canvas" width="800" height="1630"></canvas>
+<body>
+  <canvas id="transparent5" width="800" height="1630" style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
+
+  <canvas id="canvas" width="800" height="1630" style="position: absolute; left: 0; top: 0; z-index: 2;"></canvas>
+  
   <script>
-   
+  const transparent5 = document.getElementById("transparent5");
+  const ctx_transparent5 = transparent5.getContext("2d");
+  ctx_transparent5.globalAlpha = 0.5;
+    
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
 
