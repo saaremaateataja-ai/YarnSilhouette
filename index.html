@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Yarn</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #fff;
+    }
+    #canvas {
+      display: block;
+      margin: 20px auto;
+      border: 1px solid gray;
+      background: #f9f9f9;
+    }
+  </style>
+</head>
+<body>  <canvas id="canvas" width="800" height="1630"></canvas>
+  <script>
+   
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    // Start dot
+    let x = canvas.width / 2;
+    let y = canvas.height / 2;
+
+    // Yarn-like path parameters
+    const segmentLength = 2;
+    let currentLength = 0;
+    const maxLength = 100000; // total path length to draw before stopping
+    // Angles to create a yarn-like, curved path
+    let angle = 0;
+
+    // Store path points for drawing connected yarn path
+    const points = [{ x, y }];
+
+    // Colorful pencil colors
+    const colors = ["#e74c3c", "#f39c12", "#2ecc71", "#3498db", "#9b59b6", "#e84393"];
+    let colorIndex = 0;
+    let nextColor = 0.1;
+
+    ctx.lineWidth = 10;
+    ctx.lineCap = "round";
+
+    function drawSegment() {
+      let randomnumber = Math.floor(Math.random() * 10) + 1;
+      
+      if (currentLength > maxLength) {
+        // Stop drawing
+        return;
+      }
+
+      // Calculate next point with some oscillation to simulate yarn
+      const nextX = x + segmentLength * Math.cos(angle);
+      const nextY = y + segmentLength * Math.sin(angle);
+
+      points.push({ x: nextX, y: nextY });
+
+      ctx.strokeStyle = colors[colorIndex % colors.length];
+      nextColor = nextColor +randomnumber/100;
+      colorIndex = Math.floor(nextColor);
+
+      ctx.beginPath();
+      ctx.moveTo(points[points.length - 2].x, points[points.length - 2].y);
+      ctx.lineTo(nextX, nextY);
+      ctx.stroke();
+
+      // Update position for next segment
+      x = nextX;
+      y = nextY;
+
+      // Oscillate angle to simulate yarn-like twisting
+      angle += Math.PI / 6;
+      angle -= Math.PI / randomnumber;
+
+      currentLength += segmentLength;
+
+      //Draw next segment after 1/100 second
+      setTimeout(drawSegment, 10);
+    }
+
+    // Draw the starting dot
+    function drawStartDot() {
+      ctx.fillStyle = "#000";
+      ctx.beginPath();
+      ctx.arc(x, y, 1, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    drawStartDot();
+    drawSegment();
+  </script>
+</body>
+</html>
