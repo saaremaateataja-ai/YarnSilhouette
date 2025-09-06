@@ -60,7 +60,7 @@
       points.push({ x: nextX, y: nextY });
 
       ctx.strokeStyle = colors[colorIndex % colors.length];
-      nextColor = nextColor +randomnumber/100;
+      nextColor = (randomnumber === 10) ? nextColor++ : nextColor;
       colorIndex = Math.floor(nextColor);
 
       ctx.beginPath();
